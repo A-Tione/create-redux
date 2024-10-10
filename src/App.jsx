@@ -15,39 +15,42 @@ export const App = () => {
   )
 }
 const 大儿子 = () => <section>大儿子<User/></section>
-const 二儿子 = () => <section>二儿子<Wrapper/></section>
+const 二儿子 = () => <section>二儿子<UserModifier/>1111</section>
 const 幺儿子 = () => <section>幺儿子</section>
 const User = () => {
   const contextValue = useContext(appContext)
   return <div>User:{contextValue.appState.user.name}</div>
 
 }
-const Wrapper = () => {
-  const {appState, setAppState} = useContext(appContext)
-  const dispatch = (action) => {
-    setAppState(reducer(appState, action))
-  }
-  const reducer = (state, {type, payload}) => {
-    if (type === 'updateUser') {
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          ...payload
-        }
-      }
-    } else {
-      return false
+const connect = (Component) => {
+  return (props) => {
+    const {appState, setAppState} = useContext(appContext)
+    const dispatch = (action) => {
+      setAppState(reducer(appState, action))
     }
+    const reducer = (state, {type, payload}) => {
+      if (type === 'updateUser') {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            ...payload
+          }
+        }
+      } else {
+        return false
+      }
+    }
+    return <Component {...props} dispatch={dispatch} state={appState} />
   }
-  return <UserModifier dispatch={dispatch} state={appState} />
 }
-const UserModifier = ({dispatch, state}) => {
+const UserModifier = connect(({dispatch, state, children}) => {
   const onChange = (e) => {
     dispatch({type:'updateUser', payload: {name: e.target.value}})
   }
   return <div>
+    {children}
     <input value={state.user.name}
       onChange={onChange}/>
   </div>
-}
+})
