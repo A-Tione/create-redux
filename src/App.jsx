@@ -1,10 +1,9 @@
-// 请从课程简介里下载本代码
 import React, {useState, useContext} from 'react'
 
 const appContext = React.createContext(null)
 export const App = () => {
   const [appState, setAppState] = useState({
-    user: {name: 'frank', age: 18}
+    user: {name: 'a-tione', age: 18}
   })
   const contextValue = {appState, setAppState}
   return (
@@ -23,15 +22,26 @@ const User = () => {
   return <div>User:{contextValue.appState.user.name}</div>
 
 }
+const reducer = (state, {type, payload}) => {
+  if (type === 'updateUser') {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        ...payload
+      }
+    }
+  } else {
+    return false
+  }
+}
 const UserModifier = () => {
   const {appState, setAppState} = useContext(appContext)
   const onChange = (e) => {
-    appState.user.name = e.target.value
-    setAppState({...contextValue.appState})
+    setAppState(reducer(appState, {type:'updateUser', payload: {name: e.target.value}}))
   }
   return <div>
-    <input value={contextValue.appState.user.name}
+    <input value={appState.user.name}
       onChange={onChange}/>
   </div>
 }
-
