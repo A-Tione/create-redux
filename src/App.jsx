@@ -11,7 +11,7 @@ export const App = () => {
   )
 }
 const 大儿子 = () => <section>大儿子<User/></section>
-const 二儿子 = () => <section>二儿子<UserModifier/>1111</section>
+const 二儿子 = () => <section>二儿子<UserModifier/>二儿子的崽</section>
 const 幺儿子 = () => <section>幺儿子</section>
 const User = connect(({state, dispatch}) => {
   return <div>User:{state.user.name}</div>

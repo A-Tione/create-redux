@@ -36,8 +36,8 @@ export const connect = (Component) => {
   return (props) => {
     const {state, setState} = useContext(appContext)
     const [, update] = useState({})
-    useEffect(()=> {
-      store.subScribe(()=> {
+    useEffect(() => {
+      store.subScribe(() => {
         update({})
       })
     }, [])
