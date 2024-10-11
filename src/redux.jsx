@@ -34,7 +34,7 @@ const changed = (oldState, newState) => {
 }
 
 export const connect = (selector, dispatchSelector) => (Component) => {
-  return (props) => {
+  const Wrapper = (props) => {
     const dispatch = (action) => {
       setState(store.reducer(state, action))
     }
@@ -50,6 +50,7 @@ export const connect = (selector, dispatchSelector) => (Component) => {
     }), [selector])
     return <Component {...props} {...dispatchers} {...data} />
   }
+  return Wrapper
 }
 
 export const appContext = React.createContext(null)
