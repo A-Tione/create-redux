@@ -10,12 +10,23 @@ let dispatch = (action) => {
   setState(reducer(state, action))
 }
 const prevDispatch = dispatch
+const prevDispatch2 = dispatch
 
 dispatch = (action) => {
   if(typeof action === 'function') {
     action(dispatch)
   } else {
     prevDispatch(action)  
+  }
+}
+
+dispatch = (action) => {
+  if(action.payload instanceof Promise) {
+    action.payload.then(data => {
+      dispatch({...action, payload: data})
+    })
+  } else {
+    prevDispatch2(action)  
   }
 }
 

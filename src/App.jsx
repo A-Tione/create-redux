@@ -53,19 +53,19 @@ const ajax = () => {
     }, 3000)
   })
 }
+const fetchUserPromise = () => {
+  return ajax('/user').then(res => res.data)
+}
 const fetchUser = (dispatch) => {
-  console.log(dispatch, 'dispatch');
-  
-  ajax('/user').then(res => {
-    dispatch({type: 'updateUser', payload: res.data})
-  })
+  return ajax('/user').then(res => dispatch({type: 'updateUser', payload: res.data}))
 }
 const User = connectToUser(({user}) => {
   return <div>User:{user.name}</div>
 })
 const UserModifier = connect(null, null)(({state, dispatch}) => {
   const onClick = (e) => {
-    dispatch(fetchUser)
+    dispatch({type: 'updateUser', payload: fetchUserPromise()})
+    // dispatch(fetchUser)
   }
   return <div>
     <div>User: {state.user.haha}</div>
