@@ -7,7 +7,7 @@ const initState = {
   group: {name: '前端'}
 }
 
-const reducer = (state, {type, payload}) => {
+const reducer = (state, {type, payload}) => {  
   if (type === 'updateUser') {
     return {
       ...state,
@@ -46,16 +46,29 @@ const 幺儿子 = connect(state => {
   console.log('幺儿子执行了 ' + Math.random())
   return <section>幺儿子<div>Group: {group.name}</div></section>
 })
+const ajax = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(()=> {
+      return resolve({data: {haha:'3秒后出现结果'}})
+    }, 3000)
+  })
+}
+const fetchUser = (dispatch) => {
+  console.log(dispatch, 'dispatch');
+  
+  ajax('/user').then(res => {
+    dispatch({type: 'updateUser', payload: res.data})
+  })
+}
 const User = connectToUser(({user}) => {
   return <div>User:{user.name}</div>
 })
-const UserModifier = connectToUser(({updateUser, user, children}) => {
-  const onChange = (e) => {
-    updateUser({name: e.target.value})
+const UserModifier = connect(null, null)(({state, dispatch}) => {
+  const onClick = (e) => {
+    dispatch(fetchUser)
   }
   return <div>
-    {children}
-    <input value={user.name}
-      onChange={onChange}/>
+    <div>User: {state.user.haha}</div>
+    <button onClick={onClick}>异步获取 user</button>
   </div>
 })

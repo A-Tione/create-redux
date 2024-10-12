@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 let state = undefined
 let reducer = undefined
 let listeners = []
@@ -6,8 +6,17 @@ const setState = (newState) => {
   state = newState
   listeners.map((fn)=> fn(state))
 }
-const dispatch = (action) => {
+let dispatch = (action) => {
   setState(reducer(state, action))
+}
+const prevDispatch = dispatch
+
+dispatch = (action) => {
+  if(typeof action === 'function') {
+    action(dispatch)
+  } else {
+    prevDispatch(action)  
+  }
 }
 
 export const store = {
